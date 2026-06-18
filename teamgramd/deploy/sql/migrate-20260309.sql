@@ -36,8 +36,7 @@ ALTER TABLE `chats`
 
 -- 5) chat_invite_participants: speed up operations by chat_id / (chat_id, user_id)
 ALTER TABLE `chat_invite_participants`
-  ADD KEY `idx_chat_user` (`chat_id`, `user_id`),
-  ADD KEY `idx_chat_requested` (`chat_id`, `requested`);
+  ADD KEY `idx_chat_user` (`chat_id`, `user_id`);
 
 -- 6) chat_participants: speed up per-user chat scans
 ALTER TABLE `chat_participants`

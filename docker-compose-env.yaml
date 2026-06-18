@@ -1,6 +1,5 @@
 # docker-compose-env2: 高性能组件栈（独立方案，不依赖 docker-compose-env.yaml）
-# 组件: jaeger, prometheus, grafana, elasticsearch, kibana,
-#       go-stash, filebeat, kafka, mysql, redis, etcd, minio, minio-mc, node-exporter
+# 组件: prometheus, grafana, kafka, mysql, redis, etcd, minio, minio-mc, node-exporter
 # 启动: docker compose -f docker-compose-env2.yaml up -d
 
 services:
@@ -142,29 +141,6 @@ services:
     networks:
       - teamgram_net
 
-  # --- 可观测：追踪 ---
-  #jaeger链路追踪 — Jaeger for tracing
-  jaeger:
-    image: jaegertracing/all-in-one:1.63.0
-    container_name: jaeger
-    restart: always
-    ports:
-      - "5775:5775/udp"
-      - "6831:6831/udp"
-      - "6832:6832/udp"
-      - "5778:5778"
-      - "16686:16686"
-      - "14268:14268"
-      - "9411:9411"
-    environment:
-      - SPAN_STORAGE_TYPE=elasticsearch
-      - ES_SERVER_URLS=http://elasticsearch:9200
-      - LOG_LEVEL=debug
-    depends_on:
-      - elasticsearch
-    networks:
-      - teamgram_net
-
   # --- 可观测：指标 ---
   node-exporter:
     image: prom/node-exporter:v1.7.0
@@ -223,83 +199,8 @@ services:
     networks:
       - teamgram_net
 
-  # --- 日志与搜索 ---
-  elasticsearch:
-    container_name: elasticsearch
-    image: elasticsearch:8.12.2
-    restart: always
-    environment:
-      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
-      - "TZ=Asia/Shanghai"
-      - "discovery.type=single-node"
-      - "xpack.security.enabled=false"
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    volumes:
-      # Named volumes avoid bind-mount permission errors (node.lock AccessDeniedException
-      # when ./data/es/* is root-owned from sudo compose).
-      - elasticsearch_data:/usr/share/elasticsearch/data
-      - elasticsearch_plugins:/usr/share/elasticsearch/plugins
-    networks:
-      - teamgram_net
-
-  kibana:
-    container_name: kibana
-    image: kibana:8.12.2
-    restart: always
-    environment:
-      - "TZ=Asia/Shanghai"
-      - "I18N_LOCALE=zh-CN"
-      - "ELASTICSEARCH_HOSTS=http://elasticsearch:9200"
-      - "XPACK_SECURITY_ENABLED=false"
-    ports:
-      - "5601:5601"
-    networks:
-      - teamgram_net
-    depends_on:
-      - elasticsearch
-
-  filebeat:
-    image: elastic/filebeat:8.12.2
-    container_name: filebeat
-    environment:
-      # 时区上海 - Time zone Shanghai (Change if needed)
-      TZ: Asia/Shanghai
-    user: root
-    restart: always
-    entrypoint: "filebeat -e -strict.perms=false"  #解决配置文件权限问题 - Solving the configuration file permissions
-    volumes:
-      - ./teamgramd/deploy/filebeat/conf/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-      # 此处需指定docker的containers目录，取决于你docker的配置 - The containers directory of docker needs to be specified here, depending on your docker configuration
-      # 如snap安装的docker，则为/var/snap/docker/common/var-lib-docker/containers - Example if docker is installed by Snap /var/snap/docker/common/var-lib-docker/containers
-      # - /var/snap/docker/common/var-lib-docker/containers:/var/lib/docker/containers
-      - /var/lib/docker/containers:/var/lib/docker/containers
-    networks:
-      - teamgram_net
-    depends_on:
-      - kafka
-
-  #消费kafka中filebeat收集的数据输出到es - The data output collected by FileBeat in Kafka is output to ES
-  go-stash:
-    image: kevinwan/go-stash:1.1.1
-    container_name: go-stash
-    environment:
-      # 时区上海 - Time zone Shanghai (Change if needed)
-      TZ: Asia/Shanghai
-    restart: always
-    volumes:
-      - ./teamgramd/deploy/go-stash/etc:/app/etc
-    networks:
-      - teamgram_net
-    depends_on:
-      - elasticsearch
-      - kafka
-
 volumes:
   kafka_data:
-  elasticsearch_data:
-  elasticsearch_plugins:
 
 networks:
   teamgram_net:
