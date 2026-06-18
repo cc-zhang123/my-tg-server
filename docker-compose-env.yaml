@@ -1,5 +1,5 @@
 # docker-compose-env2: 高性能组件栈（独立方案，不依赖 docker-compose-env.yaml）
-# 组件: prometheus, grafana, kafka, mysql, redis, etcd, minio, minio-mc, node-exporter
+# 组件: kafka, mysql, redis, etcd, minio, minio-mc
 # 启动: docker compose -f docker-compose-env2.yaml up -d
 
 services:
@@ -138,64 +138,6 @@ services:
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-miniostorage}
     depends_on:
       - minio
-    networks:
-      - teamgram_net
-
-  # --- 可观测：指标 ---
-  node-exporter:
-    image: prom/node-exporter:v1.7.0
-    container_name: node-exporter
-    ports:
-      - "9100:9100"
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - --path.procfs=/host/proc
-      - --path.sysfs=/host/sys
-      - --path.rootfs=/rootfs
-      - --collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)
-    restart: always
-    networks:
-      - teamgram_net
-
-  #prometheus监控 — Prometheus for monitoring
-  prometheus:
-    image: prom/prometheus:v2.28.1
-    container_name: prometheus
-    environment:
-      # 时区上海 - Time zone Shanghai (Change if needed)
-      TZ: Asia/Shanghai
-    volumes:
-      - ./teamgramd/deploy/prometheus/server/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - ./data/prometheus/data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-    restart: always
-    user: root
-    ports:
-      - 9090:9090
-    networks:
-      - teamgram_net
-
-  #查看prometheus监控数据 - Grafana to view Prometheus monitoring data
-  grafana:
-    image: grafana/grafana:8.0.6
-    container_name: grafana
-    hostname: grafana
-    user: root
-    environment:
-      TZ: Asia/Shanghai
-      # 首次启动时生效；若已有数据卷则需在容器内用 grafana-cli 重置 - Only used on first run; reset via grafana-cli if volume exists
-      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
-    restart: always
-    volumes:
-      - ./data/grafana/data:/var/lib/grafana
-    ports:
-      - "3001:3000"
     networks:
       - teamgram_net
 
