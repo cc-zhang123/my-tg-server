@@ -42,37 +42,36 @@ firewall-cmd --list-ports
 ## 三、首次部署(全新)
 
 ```bash
-cd /opt
-rm -rf teamgram-server                                                    # 如果之前有空目录
-git clone https://github.com/cc-zhang123/my-tg-server.git teamgram-server
-cd teamgram-server
-
-# 1. 起依赖栈(kafka / etcd / redis / mysql / minio / minio-mc)
-docker compose -f docker-compose-env.yaml up -d --remove-orphans
-sleep 30
-docker compose -f docker-compose-env.yaml ps                              # 期望除 minio-mc(Exited 0) 外都 Up
-
-# 2. 起业务
-docker compose up -d
-sleep 15
-
-# 3. 验证
-docker compose ps                                                         # teamgram 容器 Up
-docker compose logs --tail=80 teamgram                                    # 看到 "run idgen ..." → "run gnetway ..."
-ss -tlnp | grep -E '10443|11443|5222'                                     # 端口监听上
+cd /opt && rm -rf teamgram-server && \
+git clone https://github.com/cc-zhang123/my-tg-server.git teamgram-server && \
+cd teamgram-server && \
+docker compose -f docker-compose-env.yaml up -d --remove-orphans && \
+sleep 30 && \
+docker compose up -d --build && \
+sleep 15 && \
+docker compose ps && \
+docker compose logs --tail=50 teamgram
 ```
+
+首次 build 耗时 5~15 分钟。完成后用 `ss -tlnp | grep -E '10443|11443|5222'` 验证端口监听。
 
 ---
 
 ## 四、日常更新(本地推新代码后)
 
 ```bash
-cd /opt/teamgram-server
-git pull
-docker compose -f docker-compose-env.yaml up -d --remove-orphans          # 配置改了才有效
-docker compose up -d --build                                              # Go 代码改了要加 --build
-docker compose logs -f teamgram
+cd /opt/teamgram-server && \
+git pull && \
+docker compose down && \
+docker compose -f docker-compose-env.yaml up -d --remove-orphans && \
+sleep 30 && \
+docker compose up -d --build && \
+sleep 15 && \
+docker compose ps && \
+docker compose logs --tail=30 teamgram
 ```
+
+只改 yaml 配置没改 Go 代码,build 走缓存只要 1~2 分钟。改了代码就是完整 5~15 分钟。
 
 ---
 
