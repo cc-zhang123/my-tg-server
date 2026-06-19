@@ -71,7 +71,8 @@ func (c *ChatCore) ChatImportChatInvite2(in *chat.TLChatImportChatInvite2) (*cha
 			return nil, err2
 		}
 
-		if mChat.ParticipantsCount() >= 200 {
+		// 基础群人数上限：1000。和 messages.createChat_handler.go / chat.addChatUser_handler.go 同步。
+		if mChat.ParticipantsCount() >= 1000 {
 			err2 = mtproto.ErrUsersTooMuch
 			c.Logger.Errorf("chat.importChatInvite - error: %v", err2)
 			return nil, err2

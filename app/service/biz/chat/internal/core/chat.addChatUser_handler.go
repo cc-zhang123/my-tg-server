@@ -58,7 +58,8 @@ func (c *ChatCore) ChatAddChatUser(in *chat.TLChatAddChatUser) (*mtproto.Mutable
 		inviterId = chat2.Creator()
 	}
 
-	if chat2.ParticipantsCount() >= 200 {
+	// 基础群人数上限：1000。和 messages.createChat_handler.go / importChatInvite2_handler.go 同步。
+	if chat2.ParticipantsCount() >= 1000 {
 		err = mtproto.ErrUsersTooFew
 		c.Logger.Errorf("chat.addChatUser - error: %v", err)
 		return nil, err

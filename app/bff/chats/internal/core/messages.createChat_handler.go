@@ -59,7 +59,10 @@ func (c *ChatsCore) createChat(iUsers []*mtproto.InputUser, chatTitle string, tt
 	}
 
 	// check user too much
-	if len(iUsers) > 200-1 {
+	// 基础群人数上限：自定义为 1000（Telegram 默认 200）。
+	// 同步改了 app/service/biz/chat/internal/core/chat.addChatUser_handler.go 和
+	// chat.importChatInvite2_handler.go 里的同一个阈值。
+	if len(iUsers) > 1000-1 {
 		err := mtproto.ErrUsersTooMuch
 		c.Logger.Errorf("messages.createChat - error: %v", err)
 		return nil, err
