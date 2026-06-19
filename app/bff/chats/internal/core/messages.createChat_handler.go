@@ -38,6 +38,13 @@ func (c *ChatsCore) createChat(iUsers []*mtproto.InputUser, chatTitle string, tt
 		missingInvitees = make([]*mtproto.MissingInvitee, 0)
 	)
 
+	// ttl_period:flags.0?int — 客户端传 0（带 flag）等同于"不设置自动删除"，
+	// 否则下面会发一条 Period=0 的 SetMessagesTTL 系统消息，让客户端显示
+	// "您为所有聊天设置了自动删除计时器，0 秒"——明显是错的。
+	if ttlPeriod != nil && ttlPeriod.Value <= 0 {
+		ttlPeriod = nil
+	}
+
 	// check chat title
 	if chatTitle == "" {
 		err := mtproto.ErrChatTitleEmpty
