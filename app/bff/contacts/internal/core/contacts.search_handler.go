@@ -92,16 +92,20 @@ func (c *ContactsCore) ContactsSearch(in *mtproto.TLContactsSearch) (*mtproto.Co
 			idHelper.PickByPeer(v.Peer)
 		}
 
-		rVList2, err := c.svcCtx.Dao.UserClient.UserSearch(c.ctx, &userpb.TLUserSearch{
-			Q:                in.Q,
-			ExcludedContacts: append(contacts.GetDatas(), c.MD.UserId),
-			Offset:           0,
-			Limit:            limit,
-		})
-
-		for _, v := range rVList2.GetIdList() {
-			idHelper.PickByPeerUtil(mtproto.PEER_USER, v)
-		}
+		// 私有定制：禁用按 first_name/last_name 子串模糊查找用户，
+		// 只保留上方 UserSearchUsername（按 username 精确匹配）。
+		// 原逻辑保留在注释里，恢复时反注释即可。
+		//
+		// rVList2, err := c.svcCtx.Dao.UserClient.UserSearch(c.ctx, &userpb.TLUserSearch{
+		// 	Q:                in.Q,
+		// 	ExcludedContacts: append(contacts.GetDatas(), c.MD.UserId),
+		// 	Offset:           0,
+		// 	Limit:            limit,
+		// })
+		//
+		// for _, v := range rVList2.GetIdList() {
+		// 	idHelper.PickByPeerUtil(mtproto.PEER_USER, v)
+		// }
 	}
 
 	idHelper.Visit(

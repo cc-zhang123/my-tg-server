@@ -40,8 +40,11 @@ func (c *UserCore) UserSearchUsername(in *user.TLUserSearchUsername) (*user.Vect
 		in.Limit = 50
 	}
 
-	// 构造模糊查询字符串
-	q2 := in.Q + "%"
+	// 只支持 username 精确匹配（私有定制改动）。
+	// 原行为：q2 := in.Q + "%" — LIKE 'q%' 前缀模糊匹配。
+	// 现行为：q2 := in.Q       — LIKE 'q' 等同于精确等值（'%'/'_' 是 LIKE 通配符；
+	// 假设 username 里不含这俩字符，DB 列校验也限制 [a-zA-Z0-9_]）。
+	q2 := in.Q
 	doList, _ := c.svcCtx.Dao.UsernameDAO.SearchByQueryNotIdListWithCB(
 		c.ctx,
 		q2,
