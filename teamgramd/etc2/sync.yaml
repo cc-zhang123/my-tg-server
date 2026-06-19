@@ -33,7 +33,7 @@ Routine:
   Size: 100
 
 Mysql:
-  DSN: teamgram:teamgram@tcp(mysql:3306)/teamgram?charset=utf8mb4&parseTime=true
+  DSN: teamgram:Mysql1008613.@tcp(mysql:3306)/teamgram?charset=utf8mb4&parseTime=true
   Active: 64
   Idle: 64
   IdleTimeout: 4h

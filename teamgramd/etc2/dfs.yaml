@@ -32,7 +32,7 @@ Cache:
 Minio:
   Endpoint: minio:9000
   AccessKeyID: minio
-  SecretAccessKey: miniostorage
+  SecretAccessKey: Minio1008613.
   UseSSL: false
   Bucket:
     Documents: documents
