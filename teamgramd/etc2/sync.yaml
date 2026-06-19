@@ -8,7 +8,8 @@ Log:
   ServiceName: messenger.sync
   #Mode: file
   #Path: ../logs/sync
-  Level: debug
+  Level: info
+  DisableStat: true
 # #监控
 # Prometheus:
 #   Host: 0.0.0.0

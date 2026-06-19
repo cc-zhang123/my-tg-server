@@ -8,7 +8,8 @@ Log:
   ServiceName: service.status
   #Mode: file
   #Path: ../logs/status
-  Level: debug
+  Level: info
+  DisableStat: true
 #监控
 Prometheus:
   Host: 0.0.0.0

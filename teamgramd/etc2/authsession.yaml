@@ -8,7 +8,8 @@ Log:
   ServiceName: service.authsession
   #Mode: file
   #Path: ../logs/authsession
-  Level: debug
+  Level: info
+  DisableStat: true
 #监控
 Prometheus:
   Host: 0.0.0.0

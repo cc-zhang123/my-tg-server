@@ -9,7 +9,8 @@ Log:
   ServiceName: messenger.msg
   #Mode: file
   #Path: ../logs/msg
-  Level: debug
+  Level: info
+  DisableStat: true
 #监控
 Prometheus:
   Host: 0.0.0.0

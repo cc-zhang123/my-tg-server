@@ -9,7 +9,8 @@ Log:
   ServiceName: bff.bff
   #Mode: file
   #Path: ../logs/bff
-  Level: debug
+  Level: info
+  DisableStat: true
 #监控
 Prometheus:
   Host: 0.0.0.0
@@ -26,12 +27,16 @@ KV:
   - Host: redis:6379
 
 Code:
-  Name: "none"
-  SendCodeUrl: ""
+  # Name: "none" 走开发旁路, 任意手机号 + 验证码 12345 即可登录
+  # Name: "aliyun" 走阿里云短信
+  Name: "aliyun"
+  SendCodeUrl: ""                          # 可选, 默认 https://dysmsapi.aliyuncs.com/
   VerifyCodeUrl: ""
-  Key: ""
-  Secret: ""
-  RegionId: ""
+  Key: "TODO_FILL_ALIYUN_ACCESS_KEY_ID"    # AccessKeyId
+  Secret: "TODO_FILL_ALIYUN_ACCESS_SECRET" # AccessKeySecret
+  RegionId: "cn-hangzhou"
+  SignName: "TODO_FILL_SIGN_NAME"          # 阿里云短信签名 (控制台已审核通过)
+  TemplateCode: "TODO_FILL_TEMPLATE_CODE"  # 模板 CODE, 形如 SMS_xxxxxxxx, 模板内需含 ${code} 占位符
 
 BizServiceClient:
   Etcd:

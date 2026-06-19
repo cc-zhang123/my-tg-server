@@ -8,7 +8,8 @@ Http:
     ServiceName: interface.httpserver
     #Mode: file
     #Path: ../logs/httpserver
-    Level: debug
+    Level: info
+    DisableStat: true
 #监控
 Prometheus:
   Host: 0.0.0.0

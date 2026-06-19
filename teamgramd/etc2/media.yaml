@@ -9,7 +9,8 @@ Log:
   ServiceName: service.media
   #Mode: file
   #Path: ../logs/media
-  Level: debug
+  Level: info
+  DisableStat: true
 #监控
 Prometheus:
   Host: 0.0.0.0

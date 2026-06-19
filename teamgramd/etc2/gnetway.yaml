@@ -8,7 +8,8 @@ Log:
   ServiceName: interface.gateway
   #Mode: file
   #Path: ../logs/gnetway
-  Level: debug
+  Level: info
+  DisableStat: true
 #监控
 Prometheus:
   Host: 0.0.0.0
