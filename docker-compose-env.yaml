@@ -81,10 +81,12 @@ services:
     image: mysql:8.0
     container_name: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      # 默认值与 .env.example 保持一致；线上请通过 .env 覆盖为唯一强口令。
+      # teamgramd/etc2/*.yaml 里的 DSN 用的是 MYSQL_PASSWORD，改了要同步改 yaml。
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-Root1008613.}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-teamgram}
       MYSQL_USER: ${MYSQL_USER:-teamgram}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-teamgram}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-Mysql1008613.}
     ports:
       - "3306:3306"
     volumes:
@@ -113,7 +115,7 @@ services:
       - "9001:9001"
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minio}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-miniostorage}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-Minio1008613.}
     command: server /data --console-address ":9001"
     volumes:
       - ./data/minio:/data
@@ -128,14 +130,14 @@ services:
     command:
       - |
         sleep 10
-        mc alias set myminio http://minio:9000 $${MINIO_ROOT_USER:-minio} $${MINIO_ROOT_PASSWORD:-miniostorage}
+        mc alias set myminio http://minio:9000 $${MINIO_ROOT_USER:-minio} $${MINIO_ROOT_PASSWORD:-Minio1008613.}
         mc mb myminio/documents --ignore-existing
         mc mb myminio/encryptedfiles --ignore-existing
         mc mb myminio/photos --ignore-existing
         mc mb myminio/videos --ignore-existing
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minio}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-miniostorage}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-Minio1008613.}
     depends_on:
       - minio
     networks:
