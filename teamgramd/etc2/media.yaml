@@ -17,11 +17,11 @@ Prometheus:
   Port: 20651
   Path: /metrics
 #链路追踪
-Telemetry:
-  Name: service.media
-  Endpoint: jaeger:4317
-  Sampler: 1.0
-  Batcher: otlpgrpc
+# Telemetry:
+#   Name: service.media
+#   Endpoint: jaeger:4317
+#   Sampler: 1.0
+#   Batcher: otlpgrpc
   
 Mysql:
   DSN: teamgram:Mysql1008613.@tcp(mysql:3306)/teamgram?charset=utf8mb4&parseTime=true

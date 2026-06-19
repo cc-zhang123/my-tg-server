@@ -17,11 +17,11 @@ Prometheus:
   Port: 20011
   Path: /metrics
 #链路追踪
-Telemetry:
-  Name: bff.bff
-  Endpoint: jaeger:4317
-  Sampler: 1.0
-  Batcher: otlpgrpc
+# Telemetry:
+#   Name: bff.bff
+#   Endpoint: jaeger:4317
+#   Sampler: 1.0
+#   Batcher: otlpgrpc
   
 KV:
   - Host: redis:6379

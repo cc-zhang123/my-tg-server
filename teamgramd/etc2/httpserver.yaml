@@ -16,11 +16,11 @@ Prometheus:
   Port: 20011
   Path: /metrics
 #链路追踪
-Telemetry:
-  Name: interface.httpserver
-  Endpoint: jaeger:4317
-  Sampler: 1.0
-  Batcher: otlpgrpc
+# Telemetry:
+#   Name: interface.httpserver
+#   Endpoint: jaeger:4317
+#   Sampler: 1.0
+#   Batcher: otlpgrpc
   
 KeyFile: "./server_pkcs1.key"
 KeyFingerprint: "12240908862933197005"

@@ -16,11 +16,11 @@ Prometheus:
   Port: 20671
   Path: /metrics
 #链路追踪
-Telemetry:
-  Name: service.status
-  Endpoint: jaeger:4317
-  Sampler: 1.0
-  Batcher: otlpgrpc
+# Telemetry:
+#   Name: service.status
+#   Endpoint: jaeger:4317
+#   Sampler: 1.0
+#   Batcher: otlpgrpc
   
 Status:
   - Host: redis:6379

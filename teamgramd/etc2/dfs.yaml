@@ -17,11 +17,11 @@ Prometheus:
   Port: 20641
   Path: /metrics
 #链路追踪
-Telemetry:
-  Name: service.dfs
-  Endpoint: jaeger:4317
-  Sampler: 1.0
-  Batcher: otlpgrpc
+# Telemetry:
+#   Name: service.dfs
+#   Endpoint: jaeger:4317
+#   Sampler: 1.0
+#   Batcher: otlpgrpc
   
 MiniHttp:
   Name: service.dfs.minihttp

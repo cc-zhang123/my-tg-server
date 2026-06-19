@@ -16,11 +16,11 @@ Prometheus:
   Port: 20661
   Path: /metrics
 #链路追踪
-Telemetry:
-  Name: service.idgen
-  Endpoint: jaeger:4317
-  Sampler: 1.0
-  Batcher: otlpgrpc
+# Telemetry:
+#   Name: service.idgen
+#   Endpoint: jaeger:4317
+#   Sampler: 1.0
+#   Batcher: otlpgrpc
   
 NodeId: 1
 
